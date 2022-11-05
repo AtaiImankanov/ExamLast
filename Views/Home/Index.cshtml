@@ -13,7 +13,8 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div>
- <input type="button" id="order"  value="Show Trans journey"/>
+ <input type="button" id="order" onclick="makeOrder()" value="Show Trans journey"/>
+ 
 </div>
 }
 
@@ -22,9 +23,9 @@
 {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
      <script>
-          $( "#order" ).on( "click", function() {
-   $('#ShowTrans').load('@Url.Action("ShowTrans", "Home"))
-});  
+          const makeOrder= function() {
+              $('#ShowTrans').load('@Url.Action("ShowTrans", "Home"))
+           }     
      </script>
 
 }

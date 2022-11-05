@@ -11,5 +11,9 @@ namespace homework_64_Atai.Models
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+        }
     }
 }
