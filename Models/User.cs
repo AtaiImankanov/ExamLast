@@ -5,8 +5,7 @@ namespace homework_64_Atai.Models
 {
     public class User : IdentityUser<int>
     {
-        public String Avatar { get; set; }
-        public String Role { get; set; }
-
+        public int Balance { get; set; }
+        public int PersonalBill { get; set; }
     }
 }

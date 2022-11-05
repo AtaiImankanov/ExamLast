@@ -7,8 +7,8 @@ namespace homework_64_Atai.ViewModels
     {
         [Required]
 
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        [Display(Name = "Personal Bill")]
+        public int PersonalBill { get; set; }
 
 
 

@@ -30,7 +30,6 @@ namespace homework_64_Atai
 
                 var rolesManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-                await AdminInitializer.SeedAdminUser(rolesManager);
 
             }
 

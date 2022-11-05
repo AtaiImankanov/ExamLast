@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Transaction";
+}
+<div>
+ <input id="Bill"  asp-validation-for="PersonalBill" />
+ </div>
+ <div>
+ <input id="Amount"  asp-validation-for="PersonalBill" />
+ </div>
+ <div>
+  <input  type="button" onclick="TopUp()"value="Transaction" />
+  </div>
+  @section Scripts
+{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function TopUp() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Transaction", "Home")',            
+                data: { 'amount': $('#Amount').val(), 'bill': $('#Bill').val() },
+                success: console.log('все ок')
+            });
+        }
+    </script>
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

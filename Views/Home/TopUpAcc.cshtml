@@ -1,0 +1,52 @@
+﻿@model homework_64_Atai.ViewModels.TopUpViewModel
+@{
+    ViewData["Title"] = "Top up Acc page";
+}
+
+
+   <div>
+
+       <label asp-for="PersonalBill"></label><br />
+
+       <input id="Bill" asp-for="PersonalBill"/>
+
+       <span asp-validation-for="PersonalBill"></span>
+
+   </div>
+
+   <div>
+
+       <label asp-for="AmountTopUp"></label><br />
+
+       <input id="Amount" asp-for="AmountTopUp" />
+
+       <span asp-validation-for="AmountTopUp"></span>
+
+   </div>
+   <div>
+
+       <input  type="submit" onclick="TopUp()"value="Войти" />
+
+   </div>
+
+
+@section Scripts
+{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function TopUp() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("TopUpAcc", "Home")',            
+                data: { 'amount': $('#Amount').val(), 'bill': $('#Bill').val() },
+                success: console.log('все ок')
+            });
+        }
+    </script>
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+}

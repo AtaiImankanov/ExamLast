@@ -8,23 +8,9 @@ namespace homework_64_Atai.ViewModels
         {
 
             [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
-            [Remote(action: "EmailValid", controller: "Account", ErrorMessage = "Этот Email уже занят")]
-        public string Email { get; set; }
-            [Required]
         [Display(Name = "Name")]
-        [Remote(action: "NameValid", controller: "Account", ErrorMessage = "Этот Name уже занят")]
         public string UserName { get; set; }
-        public string Avatar { get; set; }
 
-        [Required]
-        [Display(Name = "PhoneNumber")]
-        [Remote(action: "PhoneNumberValid", controller: "Account", ErrorMessage = "Этот Phone Number уже занят")]
-        public string PhoneNumber { get; set; }
-        [Required]
-            public string Role { get; set; }
-            
             [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]

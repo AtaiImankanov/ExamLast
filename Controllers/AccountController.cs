@@ -3,6 +3,7 @@ using homework_64_Atai.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace LabInsta.Controllers
@@ -12,9 +13,9 @@ namespace LabInsta.Controllers
 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly AppContext _context;
-        private string[] roles = new[] { "company", "worker" };
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, AppContext context)
+        private readonly homework_64_Atai.Models.AppContext _context;
+        private static int _counter = 666666;
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, homework_64_Atai.Models.AppContext context)
 
         {
             _context = context;
@@ -42,21 +43,15 @@ namespace LabInsta.Controllers
         {
 
             if (ModelState.IsValid)
-
             {
 
+                IsCorrectBill(_counter++);
                 User user = new User
                 {
-                    Email = model.Email,
                     UserName = model.UserName,
-                    PhoneNumber = model.PhoneNumber,
-                    Avatar = model.Avatar,
-                    Role = model.Role
+                    PersonalBill = _counter++,
+                    Balance = 100
                 };
-                if (user.Avatar == null)
-                {
-                    user.Avatar = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/640px-Anonymous_emblem.svg.png";
-                }
                 var result = await _userManager.CreateAsync(user, model.Password);
                 
 
@@ -67,14 +62,6 @@ namespace LabInsta.Controllers
                 if (result.Succeeded)
 
                 {
-                    if (user.Role == "company")
-                    {
-                        await _userManager.AddToRoleAsync(user,"company");
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, "worker");
-                    }
                    
                     await _signInManager.SignInAsync(user, false);
                     
@@ -94,6 +81,17 @@ namespace LabInsta.Controllers
         }
         [HttpGet]
 
+        public void IsCorrectBill(int bill)
+        {           
+                foreach (var u in _context.Users)
+                {
+                    if (bill == u.PersonalBill)
+                    {
+                        _counter = +1;
+                        IsCorrectBill(_counter);
+                    }
+                }
+        }
         public IActionResult Login(string returnUrl = null)
 
         {
@@ -111,7 +109,14 @@ namespace LabInsta.Controllers
 
             {
                 Microsoft.AspNetCore.Identity.SignInResult result = null;
-                User user = await _userManager.FindByEmailAsync(model.Email);
+                User user = new User();
+                foreach(var u in _context.Users)
+                {
+                    if(u.PersonalBill == model.PersonalBill)
+                    {
+                        user = u;
+                    }
+                }
                 if (user != null)
                 {
                     result = await _signInManager.PasswordSignInAsync(
@@ -168,39 +173,20 @@ namespace LabInsta.Controllers
             return RedirectToAction("Index", "Home");
 
         }
-        public bool EmailValid(string Email)
+        public bool BillValid(int PersonalBill)
         {
+            
             foreach (var e in _userManager.Users)
             {
-                if (e.Email == Email)
+                if (e.PersonalBill == PersonalBill)
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
-        public bool NameValid(string UserName)
-        {
-            foreach (var e in _userManager.Users)
-            {
-                if (e.UserName == UserName)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        public bool PhoneNumberValid(string PhoneNumber)
-        {
-            foreach (var e in _userManager.Users)
-            {
-                if (e.PhoneNumber == PhoneNumber)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+
+     
        
     }
 }
