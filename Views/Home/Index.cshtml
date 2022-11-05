@@ -7,25 +7,11 @@
 <div class="text-center">
     <h1 class="display-4">@Localizer["Welcomer"]</h1>
 </div>
-<div id="ShowTrans">
 
-</div>
 @if (User.Identity.IsAuthenticated)
 {
     <div>
- <input type="button" id="order" onclick="makeOrder()" value="Show Trans journey"/>
+<a asp-area="" asp-controller="Home" asp-action="ShowTrans">Privacy</a>
  
 </div>
-}
-
-
-@section Scripts
-{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <script>
-          const makeOrder= function() {
-              $('#ShowTrans').load('@Url.Action("ShowTrans", "Home"))
-           }     
-     </script>
-
 }

@@ -3,17 +3,19 @@
     ViewData["Title"] = "Transaction";
 }
 <div>
+
+    PersnalBill
  <input id="Bill"  asp-validation-for="PersonalBill" />
  </div>
  <div>
+     Amount
  <input id="Amount"  asp-validation-for="PersonalBill" />
  </div>
  <div>
   <input  type="button" onclick="TopUp()"value="Transaction" />
   </div>
   @section Scripts
-{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{   
     <script>
         function TopUp() {
             $.ajax({

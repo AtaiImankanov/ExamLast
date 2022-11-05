@@ -127,7 +127,7 @@ namespace homework_64_Atai.Controllers
             var trans = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoGet).ToList();
             var trans1 = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoSend).ToList();
             trans.AddRange(trans1);
-            return PartialView("ShowTransPar", trans);
+            return View(trans);
         }
 
     }
