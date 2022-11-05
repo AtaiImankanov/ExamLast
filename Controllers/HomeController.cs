@@ -2,6 +2,7 @@
 using homework_64_Atai.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,13 +19,18 @@ namespace homework_64_Atai.Controllers
         private readonly Models.AppContext _context;
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly UserManager<User> _userManager;
-
+        private User anon;
         public HomeController(ILogger<HomeController> logger, IStringLocalizer<HomeController> localizer, Models.AppContext context, UserManager<User> userManager)
         {
             _userManager=userManager;
             _localizer=localizer;
             _logger = logger;
             _context=context;
+            anon = new User()
+            {
+                UserName = "Anon",
+                Id = 0
+            };
         }
 
         public IActionResult Index()
@@ -49,6 +55,15 @@ namespace homework_64_Atai.Controllers
             var user = _context.Users.Where(u => u.PersonalBill == bill).FirstOrDefault();  
            if(user!= null)
             {
+                TransJ asd = new TransJ
+                {
+                    WhoGetId = user.Id,
+                    WhoSendId = anon.Id,
+                    WhoSend = anon,
+                    dateCreated = DateTime.Now,
+                    amountOfTrans = amount
+
+                };
                 user.Balance = user.Balance + amount;
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index","Home");
@@ -77,6 +92,15 @@ namespace homework_64_Atai.Controllers
             {
                 if (curuser.Balance - amount >= 0)
                 {
+                    TransJ asd = new TransJ
+                    {
+                        WhoGetId = user.Id,
+                        WhoSendId = anon.Id,
+                        WhoSend = anon,
+                        dateCreated = DateTime.Now,
+                        amountOfTrans = amount
+
+                    };
                     curuser.Balance = curuser.Balance - amount;
                     user.Balance = user.Balance + amount;
                     await _context.SaveChangesAsync();
@@ -93,6 +117,17 @@ namespace homework_64_Atai.Controllers
         public IActionResult Transaction()
         {
             return View();
+        }
+
+        public IActionResult ShowTrans()
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            int idUser = Convert.ToInt32(_userManager.GetUserId(currentUser));
+            var curuser = _userManager.Users.FirstOrDefault(x => x.Id == idUser);
+            var trans = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoGet).ToList();
+            var trans1 = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoSend).ToList();
+            trans.AddRange(trans1);
+            return PartialView("ShowTransPar", trans);
         }
 
     }

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace homework_64_Atai.Migrations
 {
-    public partial class AddedUser : Migration
+    public partial class AddedTransJs : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -157,6 +157,34 @@ namespace homework_64_Atai.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Transjs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    dateCreated = table.Column<DateTime>(nullable: false),
+                    amountOfTrans = table.Column<int>(nullable: false),
+                    WhoSendId = table.Column<int>(nullable: false),
+                    WhoGetId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transjs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transjs_AspNetUsers_WhoGetId",
+                        column: x => x.WhoGetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transjs_AspNetUsers_WhoSendId",
+                        column: x => x.WhoSendId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -193,6 +221,16 @@ namespace homework_64_Atai.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transjs_WhoGetId",
+                table: "Transjs",
+                column: "WhoGetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transjs_WhoSendId",
+                table: "Transjs",
+                column: "WhoSendId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,6 +249,9 @@ namespace homework_64_Atai.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Transjs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

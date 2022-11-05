@@ -10,8 +10,8 @@ using homework_64_Atai.Models;
 namespace homework_64_Atai.Migrations
 {
     [DbContext(typeof(Models.AppContext))]
-    [Migration("20221105104037_AddedUser")]
-    partial class AddedUser
+    [Migration("20221105114210_AddedTransJs")]
+    partial class AddedTransJs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -150,6 +150,34 @@ namespace homework_64_Atai.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("homework_64_Atai.Models.TransJ", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("WhoGetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WhoSendId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("amountOfTrans")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("dateCreated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WhoGetId");
+
+                    b.HasIndex("WhoSendId");
+
+                    b.ToTable("Transjs");
+                });
+
             modelBuilder.Entity("homework_64_Atai.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -269,6 +297,21 @@ namespace homework_64_Atai.Migrations
                     b.HasOne("homework_64_Atai.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("homework_64_Atai.Models.TransJ", b =>
+                {
+                    b.HasOne("homework_64_Atai.Models.User", "WhoGet")
+                        .WithMany()
+                        .HasForeignKey("WhoGetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("homework_64_Atai.Models.User", "WhoSend")
+                        .WithMany()
+                        .HasForeignKey("WhoSendId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

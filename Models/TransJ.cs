@@ -13,5 +13,6 @@ namespace homework_64_Atai.Models
 
         public int WhoGetId { get; set; }
         public User WhoGet { get; set; }
+ 
     }
 }
