@@ -65,6 +65,7 @@ namespace homework_64_Atai.Controllers
 
                 };
                 user.Balance = user.Balance + amount;
+                await _context.AddAsync(asd);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index","Home");
             }
@@ -101,8 +102,10 @@ namespace homework_64_Atai.Controllers
                         amountOfTrans = amount
 
                     };
+                   
                     curuser.Balance = curuser.Balance - amount;
                     user.Balance = user.Balance + amount;
+                    await _context.AddAsync(asd);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
                 }
@@ -124,8 +127,8 @@ namespace homework_64_Atai.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             int idUser = Convert.ToInt32(_userManager.GetUserId(currentUser));
             var curuser = _userManager.Users.FirstOrDefault(x => x.Id == idUser);
-            var trans = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoGet).ToList();
-            var trans1 = _context.Transjs.Where(t => t.WhoGetId == curuser.Id && t.WhoSendId == curuser.Id).Include(t => t.WhoSend).ToList();
+            var trans = _context.Transjs.Where(t => t.WhoGetId == curuser.Id || t.WhoSendId == curuser.Id).Include(t => t.WhoGet).ToList();
+            var trans1 = _context.Transjs.Where(t => t.WhoGetId == curuser.Id || t.WhoSendId == curuser.Id).Include(t => t.WhoSend).ToList();
             trans.AddRange(trans1);
             return View(trans);
         }
